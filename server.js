@@ -19,6 +19,7 @@ type Weather {
   humidity: Float
   status: String
   message: String
+  locationName: String
 }
 
 type Query {
@@ -62,9 +63,10 @@ const makeAPIRequest = async (url) => {
   }
 
   const temperature = json.main.temp
+  const name = json.name
   const description = json.weather[0].description
   const cod = String(json.cod)
-  return { temperature, description, ...json.main, status: cod }
+  return { locationName: name, temperature, description, ...json.main, status: cod }
 }
 
 // Create express app
