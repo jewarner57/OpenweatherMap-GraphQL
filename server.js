@@ -22,7 +22,9 @@ type Weather {
 }
 
 type Query {
-  getWeather(zip: Int!, units: Units): Weather!
+  getWeatherByZip(zip: Int!, units: Units): Weather!
+  getWeatherByCityName(cityName: String!, units: Units): Weather!
+  getWeatherByCoords(lat: Float!, lon: Float!, units: Units): Weather!
 }
 
 enum Units {
@@ -35,22 +37,34 @@ enum Units {
 
 // Define a Resolver
 const root = {
-  getWeather: async ({ zip, units = 'imperial' }) => {
-    const apikey = process.env.OPENWEATHERMAP_API_KEY
-    const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}&units=${units}`
-    const res = await fetch(url)
-    const json = await res.json()
+  getWeatherByZip: async ({ zip, units = 'imperial' }) => {
+    return await makeAPIRequest(`
+    https://api.openweathermap.org/data/2.5/weather?zip=${zip}&units=${units}`)
+  },
+  getWeatherByCityName: async ({ cityName, units = 'imperial' }) => {
+    return await makeAPIRequest(`
+    https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${units}`)
+  },
+  getWeatherByCoords: async ({ lon, lat, units = 'imperial' }) => {
+    return await makeAPIRequest(`
+    https://api.openweathermap.org/data/2.5/weather?lon=${lon}&lat=${lat}&units=${units}`)
+  },
+}
 
-    if (json.cod === 200) {
-      const temperature = json.main.temp
-      const description = json.weather[0].description
-      const cod = String(json.cod)
-      return { temperature, description, ...json.main, status: cod }
-    }
-    else {
-      return { message: json.message, status: json.cod }
-    }
+const makeAPIRequest = async (url) => {
+  const apikey = process.env.OPENWEATHERMAP_API_KEY
+  const fullUrl = `${url}&appid=${apikey}`
+  const res = await fetch(fullUrl)
+  const json = await res.json()
+
+  if (json.cod !== 200) {
+    return { message: json.message, status: json.cod }
   }
+
+  const temperature = json.main.temp
+  const description = json.weather[0].description
+  const cod = String(json.cod)
+  return { temperature, description, ...json.main, status: cod }
 }
 
 // Create express app
