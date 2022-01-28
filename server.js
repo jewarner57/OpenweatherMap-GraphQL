@@ -3,6 +3,7 @@ const express = require('express')
 const { graphqlHTTP } = require('express-graphql')
 const { buildSchema } = require('graphql')
 const fetch = require('node-fetch')
+const cors = require('cors')
 
 // Challenge List:
 // https://github.com/Tech-at-DU/ACS-4390-Query-Languages/blob/master/Lessons/Lesson-3.md
@@ -71,7 +72,8 @@ const makeAPIRequest = async (url) => {
 
 // Create express app
 const app = express()
-
+// use cors
+app.use(cors())
 // Define the route for GraphQL
 app.use('/graphql', graphqlHTTP({
   schema,
