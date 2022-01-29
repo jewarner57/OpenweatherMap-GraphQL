@@ -2,18 +2,24 @@ import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { client } from './index'
 import WeatherInfo from './WeatherInfo'
-
+import './Weather.css'
 
 function Weather() {
   const [weather, setWeather] = useState('')
   const [zip, setZip] = useState('')
+  const [unit, setUnit] = useState('F')
+  const units = {
+    'C': 'metric',
+    'K': 'standard',
+    'F': 'imperial',
+  }
 
   async function getWeather() {
     try {
       const json = await client.query({
         query: gql`
         query {
-          getWeatherByZip(zip:${zip}) {
+          getWeatherByZip(zip:${zip}, units:${units[unit]}) {
           temperature
           temp_min
           temp_max
@@ -43,7 +49,13 @@ function Weather() {
         <input
           value={zip}
           onChange={(e) => setZip(e.target.value)}
+          placeholder='Zipcode'
         />
+        <select name="unit" onChange={(e) => { setUnit(e.target.value) }} value={unit}>
+          <option value="F">F</option>
+          <option value="C">C</option>
+          <option value="K">K</option>
+        </select>
         <button type="submit">Submit</button>
       </form>
     </div>
