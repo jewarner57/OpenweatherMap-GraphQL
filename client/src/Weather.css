@@ -1,3 +1,8 @@
+.Weather .useLocation {
+  border-radius: 15px 0 0 15px;
+  padding: 14px;
+}
+
 .Weather .search-type {
   border-left: 1px solid black;
   border-right: none;
@@ -5,7 +10,7 @@
 
 .Weather input {
   border: 1px solid black;
-  padding: 14px;
+  padding: 19px;
   border-right: none;
   border-left: none;
   outline: none;
@@ -15,12 +20,12 @@
   border: 1px solid black;
   border-right: none;
   border-left: none;
-  padding: 13px 0;
+  padding: 18px 0;
   outline: none;
 }
 
 .Weather button {
-  padding: 15px;
+  padding: 20px;
   color: white;
   border: none;
   background-color: black;
@@ -34,4 +39,10 @@
   justify-content: center;
   flex-direction: column;
   height: 90vh;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

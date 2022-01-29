@@ -26,7 +26,7 @@ type Weather {
 type Query {
   getWeatherByZip(zip: String!, units: Units): Weather!
   getWeatherByCityName(cityName: String!, units: Units): Weather!
-  getWeatherByCoords(lat: Float!, lon: Float!, units: Units): Weather!
+  getWeatherByCoords(lat: String!, lon: String!, units: Units): Weather!
 }
 
 enum Units {
