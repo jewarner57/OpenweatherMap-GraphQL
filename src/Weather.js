@@ -28,6 +28,7 @@ function Weather() {
       setWeather(json)
     } catch (err) {
       console.log(err.message)
+      setWeather({ data: { getWeatherByZip: { cod: '400', message: err.message } } })
     }
   }
 
