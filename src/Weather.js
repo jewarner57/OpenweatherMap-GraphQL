@@ -15,7 +15,12 @@ function Weather() {
         query {
           getWeatherByZip(zip:${zip}) {
           temperature
+          temp_min
+          temp_max
+          locationName
           description
+          status
+          message
         }
       }
       `
@@ -28,7 +33,7 @@ function Weather() {
 
   return (
     <div className="Weather">
-      <WeatherInfo weather={weather} />
+      {weather ? <WeatherInfo weather={weather} /> : ""}
 
       <form onSubmit={(e) => {
         e.preventDefault()
