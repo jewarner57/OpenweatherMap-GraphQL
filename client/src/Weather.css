@@ -1,6 +1,10 @@
-.Weather .useLocation {
+.useLocation {
   border-radius: 15px 0 0 15px;
   padding: 14px;
+  color: white;
+  border: none;
+  background-color: black;
+  font-weight: bold;
 }
 
 .Weather .search-type {
@@ -24,7 +28,7 @@
   outline: none;
 }
 
-.Weather button {
+.Weather button  {
   padding: 20px;
   color: white;
   border: none;
