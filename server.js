@@ -24,7 +24,7 @@ type Weather {
 }
 
 type Query {
-  getWeatherByZip(zip: Int!, units: Units): Weather!
+  getWeatherByZip(zip: String!, units: Units): Weather!
   getWeatherByCityName(cityName: String!, units: Units): Weather!
   getWeatherByCoords(lat: Float!, lon: Float!, units: Units): Weather!
 }

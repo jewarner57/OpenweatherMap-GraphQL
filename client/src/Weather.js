@@ -6,8 +6,9 @@ import './Weather.css'
 
 function Weather() {
   const [weather, setWeather] = useState('')
-  const [zip, setZip] = useState('')
+  const [locationQuery, setLocationQuery] = useState('')
   const [unit, setUnit] = useState('F')
+  const [query, setQuery] = useState({ type: 'getWeatherByZip', param: 'zip', value:'zip', placeholder: 'Zip Code'})
   const units = {
     'C': 'metric',
     'K': 'standard',
@@ -19,7 +20,7 @@ function Weather() {
       const json = await client.query({
         query: gql`
         query {
-          getWeatherByZip(zip:${zip}, units:${units[unit]}) {
+          ${query.type}(${query.param}:"${locationQuery}", units:${units[unit]}) {
           temperature
           temp_min
           temp_max
@@ -32,24 +33,39 @@ function Weather() {
       `
       })
       setWeather(json)
+      console.log(weather)
     } catch (err) {
       console.log(err.message)
-      setWeather({ data: { getWeatherByZip: { cod: '400', message: err.message } } })
+      setWeather({ data: { [`${query.type}`]: { status: '400', message: err.message } } })
     }
+  }
+
+  const updateQuery = (value) => {
+    let queryObj = { type: 'getWeatherByZip', param: 'zip', value:'zip', placeholder: 'Zip Code'}
+    if(value === 'city') {
+      queryObj = { type: 'getWeatherByCityName', param: 'cityName', value:'city', placeholder: 'City Name'}
+    }
+    setQuery(queryObj)
+    setLocationQuery('')
   }
 
   return (
     <div className="Weather">
-      {weather ? <WeatherInfo weather={weather} /> : ""}
+      {weather ? <WeatherInfo weather={weather.data[query.type]} /> : ""}
 
       <form onSubmit={(e) => {
         e.preventDefault()
         getWeather()
       }}>
+        <select name="searchtype" className="search-type" onChange={(e) => updateQuery(e.target.value)} value={query.value}>
+          <option value='zip'>Zip</option>
+          <option value='city'>City</option>
+        </select>
         <input
-          value={zip}
-          onChange={(e) => setZip(e.target.value)}
-          placeholder='Zipcode'
+          value={locationQuery}
+          onChange={(e) => setLocationQuery(e.target.value)}
+          placeholder={`${query.placeholder}`}
+          autoComplete="off"
         />
         <select name="unit" onChange={(e) => { setUnit(e.target.value) }} value={unit}>
           <option value="F">F</option>
@@ -63,3 +79,18 @@ function Weather() {
 }
 
 export default Weather
+
+
+/*
+          console.log(`query {
+          ${query.type}(${query.param}:"${locationQuery}", units:${units[unit]}) {
+          temperature
+          temp_min
+          temp_max
+          locationName
+          description
+          status
+          message
+        }
+      }`)
+*/

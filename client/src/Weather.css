@@ -1,7 +1,13 @@
+.Weather .search-type {
+  border-left: 1px solid black;
+  border-right: none;
+}
+
 .Weather input {
   border: 1px solid black;
   padding: 14px;
   border-right: none;
+  border-left: none;
   outline: none;
 }
 
